@@ -23,7 +23,14 @@ def create_subdocs(doc_dir, additional_meta):
     docs = [doc.__dict__ for doc in docs]
     changed_docs = []
     for doc in docs:
-        doc[["meta"]] = {**doc["meta"], **additional_meta}
+        doc["meta"] = {**doc["meta"], **additional_meta}
         changed_docs.append(doc)
     del docs
     return changed_docs
+
+
+if __name__ == "__main__":
+    doc_dir = "/home/humza/Downloads/docs/"
+    additional_metadata = {"state": "nevada"}
+    subdocs = create_subdocs(doc_dir, additional_metadata)
+    print(subdocs[0])
