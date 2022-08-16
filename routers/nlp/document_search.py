@@ -2,22 +2,8 @@ from fastapi import APIRouter, UploadFile
 import logging
 
 from src.genml.pipelines.document_search.utils import write_uploaded_file, SubDocsPreprocessor
-from app.core.adapters.elastic_search_utils import connect_elastic
-from app.core.adapters.gcs import GoogleCloudStorage
-from app.core.adapters.mongodb_connection import delete_doc
-from app.core.data.log import setup_logging
-from app.crawl.configs.constants import BUCKET_NAME, DOC_REPO_QUEUE_NAME
-from app.crawl.models.data_crawl import Crawler
-from app.crawl.models.utils import extract_relevant_info
-from app.crawl.schemas.enums import (
-    RelevancyUrlResponse,
-    RelevancyUrlRequest,
-    DeleteESResponse,
-    DeleteESRequest,
-)
 
 
-setup_logging()
 logging = logging.getLogger(__name__)
 
 
