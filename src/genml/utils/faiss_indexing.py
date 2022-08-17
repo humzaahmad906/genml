@@ -5,13 +5,13 @@ from src.genml.constants import FAISS_INDEX_FILENAME, FAISS_TRAINING_DATA
 
 
 class Faiss:
-    def __init__(self, from_file=False):
+    def __init__(self, d=128, nlist=316, from_file=False):
         if from_file:
             self.index = faiss.read_index(FAISS_INDEX_FILENAME)
         else:
             m = 8  # number of centroid IDs in final compressed vectors
             bits = 8  # number of bits in each centroid
-            # quantizer = faiss.IndexFlatIP(d) for inner product as similarity
+            # quantizer = faiss.IndexFlatIP(d) # for inner product as similarity
             quantizer = faiss.IndexFlatL2(d)  # we keep the same L2 distance flat index
             self.index = faiss.IndexIVFPQ(quantizer, d, nlist, m, bits)
             self.train()
@@ -27,5 +27,5 @@ class Faiss:
 
     def search(self, xq):
         _, indices = self.index.search(xq, self.k)
-        print(indices)
+        return indices
 
