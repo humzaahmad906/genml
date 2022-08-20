@@ -1,5 +1,6 @@
 import faiss
 import json
+from tqdm import tqdm
 
 from src.genml.constants import (
     FAISS_INDEX_FILENAME,
@@ -38,8 +39,12 @@ class Faiss:
     def create_training_data(pipeline):
         subdocs = create_subdocs(INDEX_TRAINING_DOCS_DIRECTORY)
         training_data = []
-        for subdoc in subdocs:
-            text = subdoc["content"]
-            prediction = pipeline(text)
-            training_data += prediction
+        for subdoc in tqdm(subdocs):
+            try:
+                text = subdoc["content"]
+                prediction = pipeline(text)
+                training_data += prediction
+            except Exception as e:
+                print(e)
+                pass
         json.dump(training_data, open(FAISS_TRAINING_DATA, "w"))

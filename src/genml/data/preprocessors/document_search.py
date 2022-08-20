@@ -1,8 +1,13 @@
-from haystack.nodes import TextConverter, PDFToTextConverter, DocxToTextConverter, PreProcessor
+from haystack.nodes import (
+    TextConverter,
+    PDFToTextConverter,
+    DocxToTextConverter,
+    PreProcessor,
+)
 from haystack.utils import convert_files_to_docs, fetch_archive_from_http
 
 
-def create_subdocs(doc_dir, additional_meta):
+def create_subdocs(doc_dir, additional_meta={}):
     """
     Create Subdocs from multiple documents stored in doc_dir directory and add additional meta
     :param doc_dir: directory where documents are present
@@ -17,7 +22,7 @@ def create_subdocs(doc_dir, additional_meta):
         clean_header_footer=False,
         split_by="word",
         split_length=100,
-        split_respect_sentence_boundary=True
+        split_respect_sentence_boundary=True,
     )
     docs = preprocessor.process(all_docs)
     docs = [doc.__dict__ for doc in docs]
