@@ -1,7 +1,7 @@
 from transformers import AutoTokenizer, pipeline
 from optimum.onnxruntime import ORTModelForFeatureExtraction
 
-from src.genml.models.features_extractor.config import CODEBERT_CONFIG
+from src.genml.constants import CODEBERT_CONFIG
 
 
 class CodeBert:

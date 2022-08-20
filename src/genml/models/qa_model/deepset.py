@@ -1,10 +1,10 @@
-from pathlib import Path
+
 
 from transformers import AutoTokenizer, pipeline
 from optimum.onnxruntime import ORTModelForQuestionAnswering, ORTOptimizer, ORTQuantizer
 from optimum.onnxruntime.configuration import OptimizationConfig, AutoQuantizationConfig
 
-from src.genml.models.qa_model.config import DEEPSET_CONFIG
+from src.genml.constants import DEEPSET_CONFIG
 
 
 class QADeepset:
