@@ -18,6 +18,7 @@ CODEBERT_CONFIG = {**FE_CONFIG, "model_id": FE_CONFIG["model_id"][0]}
 
 
 SUBDOCS_DIRECTORY = "data/documents"
+INDEX_TRAINING_DOCS_DIRECTORY = "data/documents_train"
 TEMP_FILE_UPLOADED_NAME = "data/file_upload_directory/temp.pdf"
 
 FAISS_INDEX_FILENAME = "data/faiss/faiss.index"

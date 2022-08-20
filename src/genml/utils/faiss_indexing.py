@@ -1,7 +1,12 @@
 import faiss
 import json
 
-from src.genml.constants import FAISS_INDEX_FILENAME, FAISS_TRAINING_DATA
+from src.genml.constants import (
+    FAISS_INDEX_FILENAME,
+    FAISS_TRAINING_DATA,
+    INDEX_TRAINING_DOCS_DIRECTORY,
+)
+from src.genml.data.preprocessors.document_search import create_subdocs
 
 
 class Faiss:
@@ -19,7 +24,7 @@ class Faiss:
         self.k = 5
 
     def train(self):
-        embeddings_data = json.load(open(FAISS_TRAINING_DATA, 'r'))
+        embeddings_data = json.load(open(FAISS_TRAINING_DATA, "r"))
         self.index.train(embeddings_data)
 
     def write_index(self):
@@ -29,3 +34,12 @@ class Faiss:
         _, indices = self.index.search(xq, self.k)
         return indices
 
+    @staticmethod
+    def create_training_data(pipeline):
+        subdocs = create_subdocs(INDEX_TRAINING_DOCS_DIRECTORY)
+        training_data = []
+        for subdoc in subdocs:
+            text = subdoc["content"]
+            prediction = pipeline(text)
+            training_data += prediction
+        json.dump(training_data, open(FAISS_TRAINING_DATA, "w"))
