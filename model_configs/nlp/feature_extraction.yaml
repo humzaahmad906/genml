@@ -1,0 +1,7 @@
+model_filename: model.onnx
+model_id:
+- microsoft/codebert-base
+onnx_path: onnx_fe
+optimized_filename: model-optimized.onnx
+quantized_filename: model-quantized.onnx
+task: feature-extraction
