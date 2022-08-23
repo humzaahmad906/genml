@@ -1,6 +1,7 @@
 import faiss
 import json
 from tqdm import tqdm
+import torch.nn.functional as F
 
 from src.genml.constants import (
     FAISS_INDEX_FILENAME,
@@ -8,6 +9,7 @@ from src.genml.constants import (
     INDEX_TRAINING_DOCS_DIRECTORY,
 )
 from src.genml.data.preprocessors.document_search import create_subdocs
+from src.genml.utils.feature_extraction import mean_pooling
 
 
 class Faiss:
@@ -36,13 +38,20 @@ class Faiss:
         return indices
 
     @staticmethod
-    def create_training_data(pipeline):
+    def create_training_data(model, tokenizer):
         subdocs = create_subdocs(INDEX_TRAINING_DOCS_DIRECTORY)
         training_data = []
         for subdoc in tqdm(subdocs):
             try:
                 text = subdoc["content"]
-                prediction = pipeline(text)
+                encoded_input = tokenizer(
+                    text, padding=True, truncation=True, return_tensors="pt"
+                )
+                model_output = model(**encoded_input)
+                sentence_embeddings = mean_pooling(
+                    model_output, encoded_input["attention_mask"]
+                )
+                prediction = F.normalize(sentence_embeddings, p=2, dim=1).tolist()
                 training_data += prediction
             except Exception as e:
                 print(e)
