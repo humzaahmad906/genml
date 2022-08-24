@@ -1,7 +1,9 @@
-import faiss
+import numpy as np
+import torch.nn.functional as F
 import json
 from tqdm import tqdm
-import torch.nn.functional as F
+
+import faiss
 
 from src.genml.constants import (
     FAISS_INDEX_FILENAME,
@@ -28,7 +30,11 @@ class Faiss:
 
     def train(self):
         embeddings_data = json.load(open(FAISS_TRAINING_DATA, "r"))
-        self.index.train(embeddings_data)
+        self.index.train(np.array(embeddings_data, np.float32))
+        self.add_index(np.array(embeddings_data, np.float32))
+
+    def add_index(self, sentence_embeddings):
+        self.index.add(sentence_embeddings)
 
     def write_index(self):
         faiss.write_index(self.index, FAISS_INDEX_FILENAME)
